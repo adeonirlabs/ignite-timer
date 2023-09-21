@@ -11,3 +11,11 @@ body,
 #root {
   @apply h-full;
 }
+
+body {
+  @apply bg-zinc-900 text-zinc-100;
+}
+
+:focus {
+  @apply outline-none;
+}
