@@ -6,9 +6,9 @@ import { cn } from '~/utils/classnames'
 
 export function Header() {
   const navLink = cn(
-    'flex h-12 w-12 items-center justify-center text-zinc-400 transition hover:text-blue-500',
-    'border-b-2 border-t-2 border-b-transparent border-t-transparent hover:border-b-blue-500',
-    'aria-[current=page]:text-blue-500',
+    'flex h-12 w-12 items-center justify-center text-zinc-400 hover:text-blue-500',
+    'border-y-2 border-transparent hover:border-b-blue-500',
+    'aria-[current=page]:text-blue-500 transition',
   )
 
   return (
