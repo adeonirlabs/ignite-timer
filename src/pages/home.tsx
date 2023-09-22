@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { differenceInSeconds } from 'date-fns'
 import { Play } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -18,6 +19,7 @@ interface Cycle {
   id: string
   name: string
   duration: number
+  startedAt: Date
 }
 
 export function Home() {
@@ -47,11 +49,26 @@ export function Home() {
       id: crypto.randomUUID(),
       name: data.task,
       duration: Number(data.duration),
+      startedAt: new Date(),
     }
     setCycles((state) => [...state, newCycle])
     setActiveCycleId(newCycle.id)
+    setCounter(0)
     reset()
   }
+
+  useEffect(() => {
+    if (activeCycle) {
+      const interval = setInterval(() => {
+        setCounter(differenceInSeconds(new Date(), activeCycle.startedAt))
+      }, 1000)
+      return () => clearInterval(interval)
+    }
+  }, [activeCycle])
+
+  useEffect(() => {
+    document.title = activeCycle ? `Timer | ${minutes}:${seconds}` : 'Timer'
+  }, [activeCycle, minutes, seconds])
 
   const inputStyles = [
     'rounded-lg bg-zinc-700/40 px-3 py-2 font-bold tracking-wide text-zinc-100',
