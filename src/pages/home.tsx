@@ -12,7 +12,7 @@ export function Home() {
 
   return (
     <main className="flex flex-1 items-center justify-center">
-      <div className="flex max-w-[50rem] flex-1 flex-col items-center justify-center gap-12">
+      <div className="mx-auto flex max-w-[50rem] flex-1 flex-col items-center justify-center gap-12">
         <form id="timer" className="flex w-full flex-wrap items-center justify-center gap-2 text-lg text-zinc-300">
           <label htmlFor="task">I will work on</label>
           <input
