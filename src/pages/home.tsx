@@ -23,9 +23,15 @@ interface Cycle {
 export function Home() {
   const [cycles, setCycles] = useState<Cycle[]>([])
   const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
+  const [counter, setCounter] = useState(0)
 
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
-  console.log(activeCycle)
+
+  const totalTime = activeCycle ? activeCycle?.duration * 60 : 0
+  const currentTime = activeCycle ? counter : 0
+
+  const minutes = String(Math.floor(currentTime / 60)).padStart(2, '0')
+  const seconds = String(currentTime % 60).padStart(2, '0')
 
   const {
     register,
@@ -88,11 +94,11 @@ export function Home() {
         </form>
 
         <div className="flex w-full justify-between gap-4 font-mono text-10xl">
-          <span className={counterStyles}>0</span>
-          <span className={counterStyles}>0</span>
+          <span className={counterStyles}>{minutes[0]}</span>
+          <span className={counterStyles}>{minutes[1]}</span>
           <span className="text-blue-500">:</span>
-          <span className={counterStyles}>0</span>
-          <span className={counterStyles}>0</span>
+          <span className={counterStyles}>{seconds[0]}</span>
+          <span className={counterStyles}>{seconds[1]}</span>
         </div>
 
         <Button form="timer" type="submit" variant="primary">
