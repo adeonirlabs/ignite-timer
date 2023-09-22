@@ -7,6 +7,9 @@ export default {
         sans: ['Inter', 'sans-serif'],
         mono: ['Roboto Mono', 'monospace'],
       },
+      fontSize: {
+        '10xl': '10rem',
+      },
     },
   },
   plugins: [],
