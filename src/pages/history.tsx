@@ -1,5 +1,69 @@
 import { Status } from '~/components/status'
 import { cn } from '~/utils/classnames'
+import { toSentenceCase } from '~/utils/string'
+
+const data = [
+  {
+    name: 'Make coffee',
+    duration: 25,
+    started: '30 minutes ago',
+    status: 'progress',
+  },
+  {
+    name: 'Walk the dog',
+    duration: 45,
+    started: '1 hour ago',
+    status: 'done',
+  },
+  {
+    name: 'Read a book',
+    duration: 10,
+    started: '15 minutes ago',
+    status: 'failed',
+  },
+  {
+    name: 'Do laundry',
+    duration: 30,
+    started: '45 minutes ago',
+    status: 'progress',
+  },
+  {
+    name: 'Cook dinner',
+    duration: 55,
+    started: '2 hours ago',
+    status: 'done',
+  },
+  {
+    name: 'Go for a run',
+    duration: 20,
+    started: '1 hour ago',
+    status: 'failed',
+  },
+  {
+    name: 'Clean the house',
+    duration: 40,
+    started: '1 hour ago',
+    status: 'done',
+  },
+  {
+    name: 'Write code',
+    duration: 15,
+    started: '30 minutes ago',
+    status: 'progress',
+  },
+  {
+    name: 'Water the plants',
+    duration: 35,
+    started: '45 minutes ago',
+    status: 'done',
+  },
+  {
+    name: 'Take a nap',
+    duration: 50,
+    started: '2 hours ago',
+    status: 'progress',
+  },
+] as const
 
 export function History() {
   const thStyles = 'border-b-4 border-zinc-800 bg-zinc-700 p-4 text-left text-sm text-zinc-100'
@@ -26,70 +90,16 @@ export function History() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className={cn(trStyles, 'w-1/2 pl-6')}>Task 1</td>
-                <td className={cn(trStyles)}>25 minutes</td>
-                <td className={cn(trStyles)}>30 minutes ago</td>
-                <td className={cn(trStyles, 'pr-6')}>
-                  <Status variant="done">Done</Status>
-                </td>
-              </tr>
-              <tr>
-                <td className={cn(trStyles, 'w-1/2 pl-6')}>Task 1</td>
-                <td className={cn(trStyles)}>25 minutes</td>
-                <td className={cn(trStyles)}>30 minutes ago</td>
-                <td className={cn(trStyles, 'pr-6')}>
-                  <Status variant="done">Done</Status>
-                </td>
-              </tr>
-              <tr>
-                <td className={cn(trStyles, 'w-1/2 pl-6')}>Task 1</td>
-                <td className={cn(trStyles)}>25 minutes</td>
-                <td className={cn(trStyles)}>30 minutes ago</td>
-                <td className={cn(trStyles, 'pr-6')}>
-                  <Status variant="failed">Interrupted</Status>
-                </td>
-              </tr>
-              <tr>
-                <td className={cn(trStyles, 'w-1/2 pl-6')}>Task 1</td>
-                <td className={cn(trStyles)}>25 minutes</td>
-                <td className={cn(trStyles)}>30 minutes ago</td>
-                <td className={cn(trStyles, 'pr-6')}>
-                  <Status variant="progress">In progress</Status>
-                </td>
-              </tr>
-              <tr>
-                <td className={cn(trStyles, 'w-1/2 pl-6')}>Task 1</td>
-                <td className={cn(trStyles)}>25 minutes</td>
-                <td className={cn(trStyles)}>30 minutes ago</td>
-                <td className={cn(trStyles, 'pr-6')}>
-                  <Status variant="done">Done</Status>
-                </td>
-              </tr>
-              <tr>
-                <td className={cn(trStyles, 'w-1/2 pl-6')}>Task 1</td>
-                <td className={cn(trStyles)}>25 minutes</td>
-                <td className={cn(trStyles)}>30 minutes ago</td>
-                <td className={cn(trStyles, 'pr-6')}>
-                  <Status variant="done">Done</Status>
-                </td>
-              </tr>
-              <tr>
-                <td className={cn(trStyles, 'w-1/2 pl-6')}>Task 1</td>
-                <td className={cn(trStyles)}>25 minutes</td>
-                <td className={cn(trStyles)}>30 minutes ago</td>
-                <td className={cn(trStyles, 'pr-6')}>
-                  <Status variant="failed">Interrupted</Status>
-                </td>
-              </tr>
-              <tr>
-                <td className={cn(trStyles, 'w-1/2 pl-6')}>Task 1</td>
-                <td className={cn(trStyles)}>25 minutes</td>
-                <td className={cn(trStyles)}>30 minutes ago</td>
-                <td className={cn(trStyles, 'pr-6')}>
-                  <Status variant="done">Done</Status>
-                </td>
-              </tr>
+              {data.map((item) => (
+                <tr key={item.name} className={cn(trStyles)}>
+                  <td className={cn(trStyles, 'w-1/2 pl-6')}>{item.name}</td>
+                  <td className={cn(trStyles)}>{item.duration} minutes</td>
+                  <td className={cn(trStyles)}>{item.started}</td>
+                  <td className={cn(trStyles, 'pr-6')}>
+                    <Status variant={item.status}>{toSentenceCase(item.status)}</Status>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
