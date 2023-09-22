@@ -1,9 +1,8 @@
 import { type ComponentProps, useContext } from 'react'
 import { useFormContext } from 'react-hook-form'
 
+import { CyclesContext } from '~/context/cycles'
 import { cn } from '~/utils/classnames'
-
-import { CyclesContext } from '..'
 
 interface Props extends ComponentProps<'form'> {}
 

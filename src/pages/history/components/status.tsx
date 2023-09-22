@@ -8,9 +8,9 @@ const status = tv({
   base: 'flex items-center gap-2 before:h-2 before:w-2 before:rounded-full',
   variants: {
     variant: {
-      done: 'before:bg-green-500',
-      progress: 'before:bg-yellow-500',
-      failed: 'before:bg-red-500',
+      inProgress: 'before:bg-yellow-500',
+      finished: 'before:bg-green-500',
+      interrupted: 'before:bg-red-500',
     },
   },
 })

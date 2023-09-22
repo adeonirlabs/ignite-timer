@@ -1,34 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Play, StopCircle } from 'lucide-react'
-import { createContext, useState } from 'react'
+import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { FormProvider } from 'react-hook-form'
 import { z } from 'zod'
 
 import { Button } from '~/components/button'
+import { CyclesContext } from '~/context/cycles'
 
 import { Countdown } from './components/countdown'
 import { Form } from './components/form'
-
-interface Cycle {
-  id: string
-  name: string
-  duration: number
-  startedAt: Date
-  interruptedAt?: Date
-  finishedAt?: Date
-}
-
-interface CyclesContextData {
-  activeCycle?: Cycle
-  activeCycleId: string | null
-  timePassed: number
-  totalTime: number
-  handleSetFinished: () => void
-  handleSetTimePassed: (value: number) => void
-}
-
-export const CyclesContext = createContext({} as CyclesContextData)
 
 const schema = z.object({
   name: z.string().min(1, 'Task name is required'),
@@ -38,67 +19,31 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>
 
 export function Home() {
-  const [cycles, setCycles] = useState<Cycle[]>([])
-  const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
-  const [timePassed, setTimePassed] = useState(0)
-
-  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
-  const totalTime = activeCycle ? activeCycle?.duration * 60 : 0
+  const { activeCycle, createCycle, interruptCycle } = useContext(CyclesContext)
 
   const formMethods = useForm<FormValues>({
     resolver: zodResolver(schema),
   })
 
-  function handleSetFinished() {
-    setCycles((state) =>
-      state.map((cycle) => (cycle.id === activeCycleId ? { ...cycle, finishedAt: new Date() } : cycle)),
-    )
-    setActiveCycleId(null)
-    formMethods.reset()
-  }
+  const { handleSubmit, reset } = formMethods
 
-  function handleSetTimePassed(value: number) {
-    setTimePassed(value)
-  }
-
-  function handleSubmit(data: FormValues) {
-    const newCycle: Cycle = {
-      id: crypto.randomUUID(),
-      name: data.name,
-      duration: data.duration,
-      startedAt: new Date(),
-    }
-    setCycles((state) => [...state, newCycle])
-    setActiveCycleId(newCycle.id)
+  function handleCreate(data: FormValues) {
+    createCycle(data)
+    reset()
   }
 
   function handleInterrupt() {
-    setCycles((state) =>
-      state.map((cycle) => (cycle.id === activeCycleId ? { ...cycle, interruptedAt: new Date() } : cycle)),
-    )
-    setActiveCycleId(null)
-    setTimePassed(0)
-    formMethods.reset()
+    interruptCycle()
+    reset()
   }
 
   return (
     <main className="flex flex-1 items-center justify-center">
       <div className="mx-auto flex max-w-[50rem] flex-1 flex-col items-center justify-center gap-12">
-        <CyclesContext.Provider
-          value={{
-            activeCycle,
-            activeCycleId,
-            timePassed,
-            totalTime,
-            handleSetFinished,
-            handleSetTimePassed,
-          }}
-        >
-          <FormProvider {...formMethods}>
-            <Form id="timer" onSubmit={formMethods.handleSubmit(handleSubmit)} />
-          </FormProvider>
-          <Countdown />
-        </CyclesContext.Provider>
+        <FormProvider {...formMethods}>
+          <Form id="timer" onSubmit={handleSubmit(handleCreate)} />
+        </FormProvider>
+        <Countdown />
 
         {activeCycle ? (
           <Button form="timer" type="button" variant="danger" onClick={handleInterrupt}>

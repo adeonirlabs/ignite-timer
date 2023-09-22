@@ -1,72 +1,21 @@
+import { formatDistanceToNow } from 'date-fns'
+import { useContext } from 'react'
+
+import type { Cycle } from '~/context/cycles'
+import { CyclesContext } from '~/context/cycles'
 import { cn } from '~/utils/classnames'
-import { toSentenceCase } from '~/utils/string'
 
 import { Status } from './components/status'
 
-const data = [
-  {
-    name: 'Make coffee',
-    duration: 25,
-    started: '30 minutes ago',
-    status: 'progress',
-  },
-  {
-    name: 'Walk the dog',
-    duration: 45,
-    started: '1 hour ago',
-    status: 'done',
-  },
-  {
-    name: 'Read a book',
-    duration: 10,
-    started: '15 minutes ago',
-    status: 'failed',
-  },
-  {
-    name: 'Do laundry',
-    duration: 30,
-    started: '45 minutes ago',
-    status: 'progress',
-  },
-  {
-    name: 'Cook dinner',
-    duration: 55,
-    started: '2 hours ago',
-    status: 'done',
-  },
-  {
-    name: 'Go for a run',
-    duration: 20,
-    started: '1 hour ago',
-    status: 'failed',
-  },
-  {
-    name: 'Clean the house',
-    duration: 40,
-    started: '1 hour ago',
-    status: 'done',
-  },
-  {
-    name: 'Write code',
-    duration: 15,
-    started: '30 minutes ago',
-    status: 'progress',
-  },
-  {
-    name: 'Water the plants',
-    duration: 35,
-    started: '45 minutes ago',
-    status: 'done',
-  },
-  {
-    name: 'Take a nap',
-    duration: 50,
-    started: '2 hours ago',
-    status: 'progress',
-  },
-] as const
-
 export function History() {
+  const { cycles } = useContext(CyclesContext)
+
+  const displayStatus = (cycle: Cycle) => {
+    if (cycle.finishedAt) return <Status variant="finished">Finished</Status>
+    if (cycle.interruptedAt) return <Status variant="interrupted">Interrupted</Status>
+    return <Status variant="inProgress">In progress</Status>
+  }
+
   const thStyles = 'border-b-4 border-zinc-800 bg-zinc-700 p-4 text-left text-sm text-zinc-100'
   const trStyles = 'border-b-4 border-zinc-800 bg-zinc-700/30 p-4 text-left text-sm text-zinc-100'
 
@@ -85,20 +34,18 @@ export function History() {
             <thead>
               <tr>
                 <th className={cn(thStyles, 'rounded-tl-lg pl-6')}>Task</th>
-                <th className={cn(thStyles)}>Duration</th>
-                <th className={cn(thStyles)}>Start</th>
+                <th className={thStyles}>Duration</th>
+                <th className={thStyles}>Start</th>
                 <th className={cn(thStyles, 'rounded-tr-lg pr-6')}>Status</th>
               </tr>
             </thead>
             <tbody>
-              {data.map((item) => (
-                <tr key={item.name} className={cn(trStyles)}>
-                  <td className={cn(trStyles, 'w-1/2 pl-6')}>{item.name}</td>
-                  <td className={cn(trStyles)}>{item.duration} minutes</td>
-                  <td className={cn(trStyles)}>{item.started}</td>
-                  <td className={cn(trStyles, 'pr-6')}>
-                    <Status variant={item.status}>{toSentenceCase(item.status)}</Status>
-                  </td>
+              {cycles.map((cycle) => (
+                <tr key={cycle.id} className={trStyles}>
+                  <td className={cn(trStyles, 'w-1/2 pl-6')}>{cycle.name}</td>
+                  <td className={trStyles}>{cycle.duration} minutes</td>
+                  <td className={trStyles}>{formatDistanceToNow(cycle.startedAt, { addSuffix: true })}</td>
+                  <td className={cn(trStyles, 'pr-6')}>{displayStatus(cycle)}</td>
                 </tr>
               ))}
             </tbody>
