@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { differenceInSeconds } from 'date-fns'
-import { Play } from 'lucide-react'
+import { Play, StopCircle } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -9,7 +9,7 @@ import { Button } from '~/components/button'
 import { cn } from '~/utils/classnames'
 
 const schema = z.object({
-  task: z.string().min(1, 'Task name is required'),
+  name: z.string().min(1, 'Task name is required'),
   duration: z.number().multipleOf(5).min(5).max(60, 'Duration must be between 5 and 60 minutes'),
 })
 
@@ -20,6 +20,7 @@ interface Cycle {
   name: string
   duration: number
   startedAt: Date
+  interruptedAt?: Date
 }
 
 export function Home() {
@@ -37,22 +38,27 @@ export function Home() {
 
   const {
     register,
-    handleSubmit,
+    handleSubmit: handleSubmitForm,
     reset,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
   })
 
-  function onSubmit(data: FormValues) {
+  function handleSubmit(data: FormValues) {
     const newCycle: Cycle = {
       id: crypto.randomUUID(),
-      name: data.task,
-      duration: Number(data.duration),
+      name: data.name,
+      duration: data.duration,
       startedAt: new Date(),
     }
     setCycles((state) => [...state, newCycle])
     setActiveCycleId(newCycle.id)
+  }
+
+  function handleInterrupt() {
+    setCycles(cycles.map((cycle) => (cycle.id === activeCycleId ? { ...cycle, interruptedAt: new Date() } : cycle)))
+    setActiveCycleId(null)
     setCounter(0)
     reset()
   }
@@ -60,11 +66,12 @@ export function Home() {
   useEffect(() => {
     if (activeCycle) {
       const interval = setInterval(() => {
-        setCounter(differenceInSeconds(new Date(), activeCycle.startedAt))
+        const timePassed = differenceInSeconds(new Date(), activeCycle.startedAt)
+        setCounter(timePassed)
       }, 1000)
       return () => clearInterval(interval)
     }
-  }, [activeCycle])
+  }, [activeCycle, totalTime])
 
   useEffect(() => {
     document.title = activeCycle ? `Timer | ${minutes}:${seconds}` : 'Timer'
@@ -82,15 +89,15 @@ export function Home() {
         <form
           id="timer"
           className="flex w-full flex-wrap items-center justify-center gap-2 text-lg text-zinc-300"
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmitForm(handleSubmit)}
         >
-          <label htmlFor="task">I will work on</label>
+          <label htmlFor="name">I will work on</label>
           <input
-            {...register('task')}
-            className={cn(inputStyles, 'input-list flex-1', { 'focus:ring-red-500': errors.task })}
+            {...register('name')}
+            className={cn(inputStyles, 'input-list flex-1', { 'focus:ring-red-500': errors.name })}
             placeholder="Name your task"
+            disabled={!!activeCycle}
             type="text"
-            id="task"
             list="tasks-list"
           />
           <datalist id="tasks-list">
@@ -103,6 +110,7 @@ export function Home() {
             {...register('duration', { valueAsNumber: true })}
             className={cn(inputStyles, 'w-20', { 'focus:ring-red-500': errors.duration })}
             placeholder="25"
+            disabled={!!activeCycle}
             type="number"
             min={5}
             step={5}
@@ -118,10 +126,17 @@ export function Home() {
           <span className={counterStyles}>{seconds[1]}</span>
         </div>
 
-        <Button form="timer" type="submit" variant="primary">
-          <Play size={24} />
-          Start
-        </Button>
+        {activeCycle ? (
+          <Button form="timer" type="button" variant="danger" onClick={handleInterrupt}>
+            <StopCircle size={24} />
+            Interrupt
+          </Button>
+        ) : (
+          <Button form="timer" type="submit" variant="primary">
+            <Play size={24} />
+            Start
+          </Button>
+        )}
       </div>
     </main>
   )
