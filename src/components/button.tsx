@@ -5,7 +5,10 @@ import { tv } from 'tailwind-variants'
 import { cn } from '~/utils/classnames'
 
 const button = tv({
-  base: 'inline-flex w-full items-center justify-center gap-2 rounded-lg px-8 py-6 font-bold text-zinc-100 transition disabled:opacity-70 disabled:cursor-not-allowed',
+  base: [
+    'inline-flex w-full items-center justify-center gap-2 rounded-lg px-8 py-6',
+    'font-bold text-zinc-100 transition disabled:opacity-70 disabled:cursor-not-allowed',
+  ],
   variants: {
     variant: {
       primary: 'bg-blue-500 enabled:hover:bg-blue-600',
