@@ -1,23 +1,38 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Play } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 import { Button } from '~/components/button'
 import { cn } from '~/utils/classnames'
 
-export function Home() {
-  const { register, handleSubmit, watch } = useForm()
+const schema = z.object({
+  task: z.string().min(1, 'Task name is required'),
+  duration: z.number().multipleOf(5).min(5).max(60, 'Duration must be between 5 and 60 minutes'),
+})
 
-  const isSubmitDisabled = !!watch('task') || !!watch('duration')
+type FormValues = z.infer<typeof schema>
+
+export function Home() {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+  })
+
+  function onSubmit(data: FormValues) {
+    console.log(data)
+    reset()
+  }
 
   const inputStyles = [
     'rounded-lg bg-zinc-700/40 px-3 py-2 font-bold tracking-wide text-zinc-100',
     'placeholder-zinc-500 transition focus:ring-2 focus:ring-blue-500',
   ]
   const counterStyles = 'rounded-lg bg-zinc-700/40 px-8 py-1'
-
-  function onSubmit(data: unknown) {
-    console.log(data)
-  }
 
   return (
     <main className="flex flex-1 items-center justify-center">
@@ -30,7 +45,7 @@ export function Home() {
           <label htmlFor="task">I will work on</label>
           <input
             {...register('task')}
-            className={cn(inputStyles, 'input-list flex-1')}
+            className={cn(inputStyles, 'input-list flex-1', { 'focus:ring-red-500': errors.task })}
             placeholder="Name your task"
             type="text"
             id="task"
@@ -41,21 +56,19 @@ export function Home() {
             <option value="Task 2" />
             <option value="Task 3" />
           </datalist>
-          <label htmlFor="amount">during</label>
+          <label htmlFor="duration">during</label>
           <input
-            {...register('amount', { valueAsNumber: true })}
-            className={cn(inputStyles, 'w-20')}
+            {...register('duration', { valueAsNumber: true })}
+            className={cn(inputStyles, 'w-20', { 'focus:ring-red-500': errors.duration })}
             placeholder="25"
             type="number"
-            id="amount"
             min={5}
-            max={60}
             step={5}
           />
           <span>minutes</span>
         </form>
 
-        <div className="text-10xl flex w-full justify-between gap-4 font-mono">
+        <div className="flex w-full justify-between gap-4 font-mono text-10xl">
           <span className={counterStyles}>0</span>
           <span className={counterStyles}>0</span>
           <span className="text-blue-500">:</span>
@@ -63,7 +76,7 @@ export function Home() {
           <span className={counterStyles}>0</span>
         </div>
 
-        <Button form="timer" type="submit" variant="primary" disabled={!isSubmitDisabled}>
+        <Button form="timer" type="submit" variant="primary">
           <Play size={24} />
           Start
         </Button>

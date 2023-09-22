@@ -77,7 +77,7 @@ export function History() {
         <div
           className={cn(
             'h-full w-full flex-1 overflow-auto',
-            'scrollbar-thin scrollbar-rounded-lg scrollbar-thumb-zinc-900/80 scrollbar-corner-zinc-700/50 scrollbar-track-zinc-700/50',
+            'scrollbar-rounded-lg scrollbar-thin scrollbar-track-zinc-700/50 scrollbar-thumb-zinc-900/80 scrollbar-corner-zinc-700/50',
           )}
         >
           <table className="w-full min-w-[36rem] border-collapse">
