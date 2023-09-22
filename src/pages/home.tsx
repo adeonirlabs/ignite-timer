@@ -1,21 +1,35 @@
 import { Play } from 'lucide-react'
+import { useForm } from 'react-hook-form'
 
 import { Button } from '~/components/button'
 import { cn } from '~/utils/classnames'
 
 export function Home() {
+  const { register, handleSubmit, watch } = useForm()
+
+  const isSubmitDisabled = !!watch('task') || !!watch('duration')
+
   const inputStyles = [
     'rounded-lg bg-zinc-700/40 px-3 py-2 font-bold tracking-wide text-zinc-100',
     'placeholder-zinc-500 transition focus:ring-2 focus:ring-blue-500',
   ]
   const counterStyles = 'rounded-lg bg-zinc-700/40 px-8 py-1'
 
+  function onSubmit(data: unknown) {
+    console.log(data)
+  }
+
   return (
     <main className="flex flex-1 items-center justify-center">
       <div className="mx-auto flex max-w-[50rem] flex-1 flex-col items-center justify-center gap-12">
-        <form id="timer" className="flex w-full flex-wrap items-center justify-center gap-2 text-lg text-zinc-300">
+        <form
+          id="timer"
+          className="flex w-full flex-wrap items-center justify-center gap-2 text-lg text-zinc-300"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <label htmlFor="task">I will work on</label>
           <input
+            {...register('task')}
             className={cn(inputStyles, 'input-list flex-1')}
             placeholder="Name your task"
             type="text"
@@ -29,6 +43,7 @@ export function Home() {
           </datalist>
           <label htmlFor="amount">during</label>
           <input
+            {...register('amount', { valueAsNumber: true })}
             className={cn(inputStyles, 'w-20')}
             placeholder="25"
             type="number"
@@ -48,7 +63,7 @@ export function Home() {
           <span className={counterStyles}>0</span>
         </div>
 
-        <Button form="timer" type="submit" variant="primary" disabled>
+        <Button form="timer" type="submit" variant="primary" disabled={!isSubmitDisabled}>
           <Play size={24} />
           Start
         </Button>
