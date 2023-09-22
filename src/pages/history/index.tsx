@@ -1,6 +1,7 @@
-import { Status } from '~/components/status'
 import { cn } from '~/utils/classnames'
 import { toSentenceCase } from '~/utils/string'
+
+import { Status } from './components/status'
 
 const data = [
   {
