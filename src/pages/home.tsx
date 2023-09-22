@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Play } from 'lucide-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -13,7 +14,19 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>
 
+interface Cycle {
+  id: string
+  name: string
+  duration: number
+}
+
 export function Home() {
+  const [cycles, setCycles] = useState<Cycle[]>([])
+  const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
+
+  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
+  console.log(activeCycle)
+
   const {
     register,
     handleSubmit,
@@ -24,7 +37,13 @@ export function Home() {
   })
 
   function onSubmit(data: FormValues) {
-    console.log(data)
+    const newCycle: Cycle = {
+      id: crypto.randomUUID(),
+      name: data.task,
+      duration: Number(data.duration),
+    }
+    setCycles((state) => [...state, newCycle])
+    setActiveCycleId(newCycle.id)
     reset()
   }
 
