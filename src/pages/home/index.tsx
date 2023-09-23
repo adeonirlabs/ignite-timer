@@ -13,7 +13,7 @@ import { Form } from './components/form'
 
 const schema = z.object({
   name: z.string().min(1, 'Task name is required'),
-  duration: z.number().multipleOf(5).min(5).max(60, 'Duration must be between 5 and 60 minutes'),
+  duration: z.number().min(1).max(25, 'Duration must be between 1 and 25 minutes'),
 })
 
 type FormValues = z.infer<typeof schema>
@@ -38,24 +38,28 @@ export function Home() {
   }
 
   return (
-    <main className="flex flex-1 items-center justify-center">
-      <div className="mx-auto flex max-w-[50rem] flex-1 flex-col items-center justify-center gap-12">
-        <FormProvider {...formMethods}>
-          <Form id="timer" onSubmit={handleSubmit(handleCreate)} />
-        </FormProvider>
-        <Countdown />
+    <main className="flex flex-1">
+      <div className="mx-auto flex max-w-[50rem] flex-1 flex-col gap-8">
+        <h1 className="text-3xl font-bold text-zinc-100">{activeCycle ? activeCycle.name : 'Start a new timer'}</h1>
 
-        {activeCycle ? (
-          <Button form="timer" type="button" variant="danger" onClick={handleInterrupt}>
-            <StopCircle size={24} />
-            Interrupt
-          </Button>
-        ) : (
-          <Button form="timer" type="submit" variant="primary">
-            <Play size={24} />
-            Start
-          </Button>
-        )}
+        <div className="mx-auto flex max-w-[50rem] flex-1 flex-col items-center justify-center gap-12">
+          <FormProvider {...formMethods}>
+            <Form id="timer" onSubmit={handleSubmit(handleCreate)} />
+          </FormProvider>
+          <Countdown />
+
+          {activeCycle ? (
+            <Button form="timer" type="button" variant="danger" onClick={handleInterrupt}>
+              <StopCircle size={24} />
+              Interrupt
+            </Button>
+          ) : (
+            <Button form="timer" type="submit" variant="primary">
+              <Play size={24} />
+              Start
+            </Button>
+          )}
+        </div>
       </div>
     </main>
   )
