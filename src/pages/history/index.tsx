@@ -1,8 +1,8 @@
 import { formatDistanceToNow } from 'date-fns'
 import { useContext } from 'react'
 
-import type { Cycle } from '~/context/cycles'
 import { CyclesContext } from '~/context/cycles'
+import type { Cycle } from '~/types'
 import { cn } from '~/utils/classnames'
 
 import { Status } from './components/status'
@@ -42,7 +42,7 @@ export function History() {
             <tbody>
               {cycles.map((cycle) => (
                 <tr key={cycle.id} className={trStyles}>
-                  <td className={cn(trStyles, 'w-1/2 pl-6')}>{cycle.name}</td>
+                  <td className={cn(trStyles, 'w-2/5 pl-6')}>{cycle.name}</td>
                   <td className={trStyles}>{cycle.duration} minutes</td>
                   <td className={trStyles}>{formatDistanceToNow(cycle.startedAt, { addSuffix: true })}</td>
                   <td className={cn(trStyles, 'pr-6')}>{displayStatus(cycle)}</td>
