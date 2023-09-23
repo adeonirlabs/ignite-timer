@@ -7,7 +7,7 @@ import { cn } from '~/utils/classnames'
 interface Props extends ComponentProps<'form'> {}
 
 export function Form({ ...props }: Props) {
-  const { activeCycle } = useContext(CyclesContext)
+  const { activeCycle, cycles } = useContext(CyclesContext)
 
   const {
     register,
@@ -31,19 +31,16 @@ export function Form({ ...props }: Props) {
         list="tasks-list"
       />
       <datalist id="tasks-list">
-        <option value="Task 1" />
-        <option value="Task 2" />
-        <option value="Task 3" />
+        {cycles && cycles.map((cycle) => <option key={cycle.id} value={cycle.name} />)}
       </datalist>
       <label htmlFor="duration">during</label>
       <input
         {...register('duration', { valueAsNumber: true })}
         className={cn(inputStyles, 'w-20', { 'focus:ring-red-500': errors.duration })}
-        placeholder="25"
+        placeholder="5"
         disabled={!!activeCycle}
         type="number"
-        min={5}
-        step={5}
+        min={1}
       />
       <span>minutes</span>
     </form>
