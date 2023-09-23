@@ -1,4 +1,5 @@
 import { formatDistanceToNow } from 'date-fns'
+import { Trash } from 'lucide-react'
 import { useContext } from 'react'
 
 import { CyclesContext } from '~/context/cycles'
@@ -8,7 +9,7 @@ import { cn } from '~/utils/classnames'
 import { Status } from './components/status'
 
 export function History() {
-  const { cycles } = useContext(CyclesContext)
+  const { cycles, deleteCycle } = useContext(CyclesContext)
 
   const displayStatus = (cycle: Cycle) => {
     if (cycle.finishedAt) return <Status variant="finished">Finished</Status>
@@ -36,7 +37,8 @@ export function History() {
                 <th className={cn(thStyles, 'rounded-tl-lg pl-6')}>Task</th>
                 <th className={thStyles}>Duration</th>
                 <th className={thStyles}>Start</th>
-                <th className={cn(thStyles, 'rounded-tr-lg pr-6')}>Status</th>
+                <th className={thStyles}>Status</th>
+                <th className={cn(thStyles, 'rounded-tr-lg pr-4')} />
               </tr>
             </thead>
             <tbody>
@@ -46,7 +48,16 @@ export function History() {
                     <td className={cn(trStyles, 'w-2/5 pl-6')}>{cycle.name}</td>
                     <td className={trStyles}>{cycle.duration} minutes</td>
                     <td className={trStyles}>{formatDistanceToNow(new Date(cycle.startedAt), { addSuffix: true })}</td>
-                    <td className={cn(trStyles, 'pr-6')}>{displayStatus(cycle)}</td>
+                    <td className={trStyles}>{displayStatus(cycle)}</td>
+                    <td className={cn(trStyles, 'pr-4')}>
+                      <button
+                        className="appearance-none text-zinc-400 transition hover:text-blue-300"
+                        type="button"
+                        onClick={() => deleteCycle(cycle.id)}
+                      >
+                        <Trash size={18} />
+                      </button>
+                    </td>
                   </tr>
                 ))}
             </tbody>

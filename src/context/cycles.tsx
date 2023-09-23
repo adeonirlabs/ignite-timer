@@ -1,7 +1,13 @@
 import type { ReactNode } from 'react'
 import { createContext, useEffect, useReducer, useState } from 'react'
 
-import { addCycleAction, cyclesReducer, finishCycleAction, interruptCycleAction } from '~/reducers/cycles'
+import {
+  addCycleAction,
+  cyclesReducer,
+  deleteCycleAction,
+  finishCycleAction,
+  interruptCycleAction,
+} from '~/reducers/cycles'
 import type { Cycle } from '~/types'
 
 interface FormData {
@@ -17,6 +23,7 @@ interface CyclesContextData {
   totalTime: number
   createCycle: (data: FormData) => void
   interruptCycle: () => void
+  deleteCycle: (id: string) => void
   handleSetFinished: () => void
   handleSetTimePassed: (value: number) => void
 }
@@ -68,6 +75,10 @@ export function CyclesProvider({ children }: Props) {
     dispatch(interruptCycleAction())
   }
 
+  function deleteCycle(id: string) {
+    dispatch(deleteCycleAction(id))
+  }
+
   function handleSetFinished() {
     dispatch(finishCycleAction())
   }
@@ -86,6 +97,7 @@ export function CyclesProvider({ children }: Props) {
         totalTime,
         createCycle,
         interruptCycle,
+        deleteCycle,
         handleSetFinished,
         handleSetTimePassed,
       }}
