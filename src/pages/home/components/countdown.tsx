@@ -16,7 +16,7 @@ export function Countdown() {
   useEffect(() => {
     if (activeCycle) {
       const interval = setInterval(() => {
-        const timePassed = differenceInSeconds(new Date(), activeCycle.startedAt)
+        const timePassed = differenceInSeconds(new Date(), new Date(activeCycle.startedAt))
         if (timePassed >= totalTime) {
           handleSetFinished()
           handleSetTimePassed(0)
