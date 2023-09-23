@@ -40,14 +40,15 @@ export function History() {
               </tr>
             </thead>
             <tbody>
-              {cycles.map((cycle) => (
-                <tr key={cycle.id} className={trStyles}>
-                  <td className={cn(trStyles, 'w-2/5 pl-6')}>{cycle.name}</td>
-                  <td className={trStyles}>{cycle.duration} minutes</td>
-                  <td className={trStyles}>{formatDistanceToNow(cycle.startedAt, { addSuffix: true })}</td>
-                  <td className={cn(trStyles, 'pr-6')}>{displayStatus(cycle)}</td>
-                </tr>
-              ))}
+              {cycles &&
+                cycles.map((cycle) => (
+                  <tr key={cycle.id} className={trStyles}>
+                    <td className={cn(trStyles, 'w-2/5 pl-6')}>{cycle.name}</td>
+                    <td className={trStyles}>{cycle.duration} minutes</td>
+                    <td className={trStyles}>{formatDistanceToNow(new Date(cycle.startedAt), { addSuffix: true })}</td>
+                    <td className={cn(trStyles, 'pr-6')}>{displayStatus(cycle)}</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
