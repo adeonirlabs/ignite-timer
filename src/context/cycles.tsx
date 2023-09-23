@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { createContext, useReducer, useState } from 'react'
+import { createContext, useEffect, useReducer, useState } from 'react'
 
 import { addCycleAction, cyclesReducer, finishCycleAction, interruptCycleAction } from '~/reducers/cycles'
 import type { Cycle } from '~/types'
@@ -28,16 +28,30 @@ interface Props {
 }
 
 export function CyclesProvider({ children }: Props) {
-  const [timePassed, setTimePassed] = useState(0)
-  const [reducer, dispatch] = useReducer(cyclesReducer, {
-    cycles: [],
-    activeCycleId: null,
-  })
+  const [state, dispatch] = useReducer(
+    cyclesReducer,
+    {
+      cycles: [],
+      activeCycleId: null,
+    },
+    (initialState) => {
+      const storage = localStorage.getItem('@ignite-timer:cycles')
+      return storage ? JSON.parse(storage) : initialState
+    },
+  )
 
-  const { cycles, activeCycleId } = reducer
+  useEffect(() => {
+    localStorage.setItem('@ignite-timer:cycles', JSON.stringify(state))
+  }, [state])
 
-  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
+  const { cycles, activeCycleId } = state
+
+  const activeCycle = cycles && cycles.find((cycle) => cycle.id === activeCycleId)
   const totalTime = activeCycle ? activeCycle?.duration * 60 : 0
+
+  const [timePassed, setTimePassed] = useState(() =>
+    activeCycle ? new Date(activeCycle.startedAt).getTime() - new Date().getTime() : 0,
+  )
 
   function createCycle(data: FormData) {
     const newCycle: Cycle = {
