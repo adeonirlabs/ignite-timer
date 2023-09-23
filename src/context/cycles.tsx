@@ -1,18 +1,12 @@
 import type { ReactNode } from 'react'
 import { createContext, useReducer, useState } from 'react'
 
+import { addCycleAction, cyclesReducer, finishCycleAction, interruptCycleAction } from '~/reducers/cycles'
+import type { Cycle } from '~/types'
+
 interface FormData {
   name: string
   duration: number
-}
-
-export interface Cycle {
-  id: string
-  name: string
-  duration: number
-  startedAt: Date
-  interruptedAt?: Date
-  finishedAt?: Date
 }
 
 interface CyclesContextData {
@@ -29,51 +23,16 @@ interface CyclesContextData {
 
 export const CyclesContext = createContext({} as CyclesContextData)
 
-interface CyclesState {
-  cycles: Cycle[]
-  activeCycleId: string | null
-}
-
 interface Props {
   children: ReactNode
 }
 
 export function CyclesProvider({ children }: Props) {
   const [timePassed, setTimePassed] = useState(0)
-  const [reducer, dispatch] = useReducer(
-    (state: CyclesState, action: any) => {
-      switch (action.type) {
-        case 'ADD_CYCLE':
-          return {
-            ...state,
-            cycles: [...state.cycles, action.payload],
-            activeCycleId: action.payload.id,
-          }
-        case 'INTERRUPT_CYCLE':
-          return {
-            ...state,
-            cycles: state.cycles.map((cycle) =>
-              cycle.id === state.activeCycleId ? { ...cycle, interruptedAt: new Date() } : cycle,
-            ),
-            activeCycleId: null,
-          }
-        case 'SET_FINISHED':
-          return {
-            ...state,
-            cycles: state.cycles.map((cycle) =>
-              cycle.id === state.activeCycleId ? { ...cycle, finishedAt: new Date() } : cycle,
-            ),
-            activeCycleId: null,
-          }
-        default:
-          return state
-      }
-    },
-    {
-      cycles: [],
-      activeCycleId: null,
-    },
-  )
+  const [reducer, dispatch] = useReducer(cyclesReducer, {
+    cycles: [],
+    activeCycleId: null,
+  })
 
   const { cycles, activeCycleId } = reducer
 
@@ -87,16 +46,16 @@ export function CyclesProvider({ children }: Props) {
       duration: data.duration,
       startedAt: new Date(),
     }
-    dispatch({ type: 'ADD_CYCLE', payload: newCycle })
+    dispatch(addCycleAction(newCycle))
     setTimePassed(0)
   }
 
   function interruptCycle() {
-    dispatch({ type: 'INTERRUPT_CYCLE' })
+    dispatch(interruptCycleAction())
   }
 
   function handleSetFinished() {
-    dispatch({ type: 'SET_FINISHED' })
+    dispatch(finishCycleAction())
   }
 
   function handleSetTimePassed(value: number) {
