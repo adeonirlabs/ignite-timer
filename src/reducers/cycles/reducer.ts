@@ -9,10 +9,11 @@ interface CyclesState {
   activeCycleId: string | null
 }
 
-export function cyclesReducer(state: CyclesState, action: { type: CyclesActionTypes; payload: Cycle }) {
+export function cyclesReducer(state: CyclesState, action: { type: CyclesActionTypes; payload?: Cycle }) {
   switch (action.type) {
     case CyclesActionTypes.ADD_CYCLE:
       return produce(state, (draft) => {
+        if (!action.payload) return
         draft.cycles.push(action.payload)
         draft.activeCycleId = action.payload.id
       })
