@@ -20,7 +20,7 @@ export function Header() {
         <Logo className="h-10 w-10 text-blue-500" />
         <button
           type="button"
-          className="appearance-none text-zinc-400 transition hover:text-blue-300"
+          className="appearance-none text-zinc-400 transition hover:text-blue-500"
           onClick={toggleDarkMode}
         >
           {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}

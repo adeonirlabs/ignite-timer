@@ -17,8 +17,10 @@ export function History() {
     return <Status variant="inProgress">In progress</Status>
   }
 
-  const thStyles = 'border-b-4 border-zinc-800 bg-zinc-700 p-4 text-left text-sm text-zinc-100'
-  const trStyles = 'border-b-4 border-zinc-800 bg-zinc-700/30 p-4 text-left text-sm text-zinc-100'
+  const thStyles =
+    'border-b-4 border-zinc-100 dark:border-zinc-800 bg-zinc-300 dark:bg-zinc-700 p-4 text-left text-sm text-zinc-900 dark:text-zinc-100'
+  const trStyles =
+    'border-b-4 border-zinc-100 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-700/30 p-4 text-left text-sm text-zinc-900 dark:text-zinc-100'
 
   return (
     <main className="flex flex-1 overflow-hidden">
@@ -27,8 +29,9 @@ export function History() {
 
         <div
           className={cn(
-            'h-full w-full flex-1 overflow-auto',
-            'scrollbar-rounded-lg scrollbar-thin scrollbar-track-zinc-700/50 scrollbar-thumb-zinc-900/80 scrollbar-corner-zinc-700/50',
+            'h-full w-full flex-1 overflow-auto bg-zinc-200 dark:bg-zinc-700/30',
+            'scrollbar-rounded-lg scrollbar-thin scrollbar-track-zinc-300/50 scrollbar-thumb-zinc-500/80 scrollbar-corner-zinc-300/50',
+            'dark:scrollbar-track-zinc-700/50 dark:scrollbar-thumb-zinc-900/80 dark:scrollbar-corner-zinc-700/50',
           )}
         >
           <table className="w-full min-w-[36rem] border-collapse">
@@ -51,7 +54,7 @@ export function History() {
                     <td className={trStyles}>{displayStatus(cycle)}</td>
                     <td className={cn(trStyles, 'pr-4')}>
                       <button
-                        className="appearance-none text-zinc-400 transition hover:text-blue-300"
+                        className="appearance-none text-zinc-500 transition hover:text-blue-500 dark:text-zinc-400 dark:hover:text-blue-500"
                         type="button"
                         onClick={() => deleteCycle(cycle.id)}
                       >

@@ -15,12 +15,15 @@ export function Form({ ...props }: Props) {
   } = useFormContext()
 
   const inputStyles = [
-    'rounded-lg bg-zinc-700/40 px-3 py-2 font-bold tracking-wide text-zinc-100',
-    'placeholder-zinc-500 transition focus:ring-2 focus:ring-blue-500',
+    'rounded-lg bg-zinc-200 dark:bg-zinc-700/40 px-3 py-2 font-bold tracking-wide text-zinc-900 dark:text-zinc-100',
+    'placeholder-zinc-400 dark:placeholder-zinc-500 transition focus:ring-2 focus:ring-blue-500',
   ]
 
   return (
-    <form className="flex w-full flex-wrap items-center justify-center gap-2 text-lg text-zinc-300" {...props}>
+    <form
+      className="flex w-full flex-wrap items-center justify-center gap-2 text-lg text-zinc-900 dark:text-zinc-300"
+      {...props}
+    >
       <label htmlFor="name">I will work on</label>
       <input
         {...register('name')}

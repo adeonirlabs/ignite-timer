@@ -11,7 +11,7 @@ export function Countdown() {
   const minutes = String(Math.floor(currentTime / 60)).padStart(2, '0')
   const seconds = String(currentTime % 60).padStart(2, '0')
 
-  const counterStyles = 'rounded-lg bg-zinc-700/40 px-8 py-1'
+  const counterStyles = 'rounded-lg bg-zinc-200 text-zinc-700 dark:bg-zinc-700/40 dark:text-zinc-200 px-8 py-1'
 
   useEffect(() => {
     if (activeCycle) {

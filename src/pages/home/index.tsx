@@ -40,7 +40,9 @@ export function Home() {
   return (
     <main className="flex flex-1">
       <div className="mx-auto flex max-w-[50rem] flex-1 flex-col gap-8">
-        <h1 className="text-3xl font-bold text-zinc-100">{activeCycle ? activeCycle.name : 'Start a new timer'}</h1>
+        <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-100">
+          {activeCycle ? activeCycle.name : 'Start a new timer'}
+        </h1>
 
         <div className="mx-auto flex max-w-[50rem] flex-1 flex-col items-center justify-center gap-12">
           <FormProvider {...formMethods}>
