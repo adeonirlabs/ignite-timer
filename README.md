@@ -1,4 +1,4 @@
-> Ignite/2023 - Projeto #2
+> Ignite - Projeto #2
 
 # Timer
 
@@ -6,27 +6,26 @@
 
 ## Sobre o projeto
 
-Nesse projeto contruímos uma aplicação completa com roteamento e diversos conceitos importantes do ecossistema React como ContextAPI, useReducer, immer e muito mais, que contém as seguintes funcionalidades:
+Esse projeto consiste em uma aplicação de timer, que contém as seguintes funcionalidades:
 
-- adicionar novo ciclo
-- interromper um clico
-- visualizar uma lista de ciclos
-- excluir um ciclo da lista
+- Adicionar um novo ciclo
+- Interromper um clico
+- Exibir uma lista de ciclos
+- Excluir um ciclo da lista
+- Alterar o tema entre `light` e `dark`
 
 ## O que foi usado
 
 - React
 - TypeScript
 - Vite
-- ~~Styled-Components~~ Tailwind
+- Tailwind
 - Tailwind-Variants
 - React Router
 - React Hook Form
 - Zod
 - Immer
-
-## O que foi acrescentado
-
-- Light/dark mode toggle
 - Eslint
 - Prettier
+
+> O projeto original não inclui Tailwind, Eslint e Prettier
